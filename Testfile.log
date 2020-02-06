@@ -1,0 +1,110 @@
+WARNING:root:I probably didn't configure the logging correctly.
+INFO:root:This is a test log, did it work
+INFO:root:2020-02-05 11:57:35.147213: 2020-02-05 11:57:35.148209: This is a test log, did it work
+INFO:root:2020-02-05 11:57:55.293346: This is a test log, did it work
+INFO:root:2020-02-05 12:04:11.188149: This is a test log, did it work
+INFO:root:2020-02-05 12:04:11.192325: GPS Coords: GPS COORDINATES
+| Ext Temp: -45.222
+| Int Temp: -5.23
+| Pressure: 1
+INFO:root:2020-02-05 12:04:34.967837: This is a test log, did it work
+INFO:root:2020-02-05 12:04:34.968838
+| GPS Coords: GPS COORDINATES
+| Ext Temp: -45.222
+| Int Temp: -5.23
+| Pressure: 1
+INFO:root:2020-02-05 12:05:14.008565: This is a test log, did it work
+INFO:root:2020-02-05 12:05:14.011540
+  | GPS Coords: GPS COORDINATES
+ | Ext Temp: -45.222
+   | Int Temp: -5.23
+ | Pressure: 1
+INFO:root:2020-02-05 12:05:34.054884: This is a test log, did it work
+INFO:root:2020-02-05 12:05:34.054884
+  | GPS Coords: GPS COORDINATES
+     | Ext Temp: -45.222
+   | Int Temp: -5.23
+  | Pressure: 1
+INFO:root:2020-02-05 12:05:52.264091: This is a test log, did it work
+INFO:root:2020-02-05 12:05:52.264091
+  | GPS Coords: GPS COORDINATES
+| Ext Temp: -45.222
+| Int Temp: -5.23
+| Pressure: 1
+INFO:root:2020-02-05 12:06:54.595860
+| GPS Coords: GPS COORDINATES
+| Ext Temp: -45.222
+| Int Temp: -5.23
+| Pressure: 1
+INFO:root:2020-02-05 12:49:49.713005
+53.3096
+-6.3186
+1.53
+121.4
+21.062
+-7.562
+980.0274
+
+INFO:root:{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+{'hhmmss': datetime.datetime(2020, 2, 5, 12, 50, 16, 52508), 'lat_dec_deg': 53.3096, 'lon_dec_deg': -6.3186, 'lat_dil': 1.53, 'alt': 121.4, 'temp1': 21.062, 'temp2': -7.562, 'pressure': 980.0274}
+
+INFO:root:2020-02-05 12:50:49.579934
+53.3096
+-6.3186
+1.53
+121.4
+21.062
+-7.562
+980.0274
+
+INFO:root:2020-02-05 12:51:02.762666
+|53.3096
+|-6.3186
+|1.53
+|121.4
+|21.062
+|-7.562
+|980.0274
+|
+INFO:root:
+|2020-02-05 12:51:25.581294
+|53.3096
+|-6.3186
+|1.53
+|121.4
+|21.062
+|-7.562
+|980.0274
+INFO:root:
+|2020-02-05 12:51:43.804675
+|53.3096
+|-6.3186
+|1.53
+|121.4
+|21.062
+|-7.562
+|980.0274
+INFO:root:
+|hhmmss:2020-02-05 12:52:28.607321
+|lat_dec_deg:53.3096
+|lon_dec_deg:-6.3186
+|lat_dil:1.53
+|alt:121.4
+|temp1:21.062
+|temp2:-7.562
+|pressure:980.0274
+INFO:root:
+|hhmmss:  2020-02-05 12:52:45.397271
+|lat_dec_deg:  53.3096
+|lon_dec_deg:  -6.3186
+|lat_dil:  1.53
+|alt:  121.4
+|temp1:  21.062
+|temp2:  -7.562
+|pressure:  980.0274
