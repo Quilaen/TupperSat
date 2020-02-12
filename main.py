@@ -22,17 +22,17 @@ class sensor:
         self.addr = self.pressuren  # setting the i2c address
 #        self.bus = smbus.SMBus(1)
 #        self.address = 0x77
-        self.C1bytes = bus.read_i2c_block_data(self.addr, 0xA2)
+        self.C1bytes = self.bus.read_i2c_block_data(self.addr, 0xA2)
         self.C1 = (self.C1bytes[0] << 8) + self.C1bytes[1]
-        self.C2bytes = bus.read_i2c_block_data(self.addr, 0xA4)
+        self.C2bytes = self.bus.read_i2c_block_data(self.addr, 0xA4)
         self.C2 = (self.C2bytes[0] << 8) + self.C2bytes[1]
-        self.C3bytes = bus.read_i2c_block_data(self.addr, 0xA6)
+        self.C3bytes = self.bus.read_i2c_block_data(self.addr, 0xA6)
         self.C3 = (self.C3bytes[0] << 8) + self.C3bytes[1]
-        self.C4bytes = bus.read_i2c_block_data(self.addr, 0xA8)
+        self.C4bytes = self.bus.read_i2c_block_data(self.addr, 0xA8)
         self.C4 = (self.C4bytes[0] << 8) + self.C4bytes[1]
-        self.C5bytes = bus.read_i2c_block_data(self.addr, 0xAA)
+        self.C5bytes = self.bus.read_i2c_block_data(self.addr, 0xAA)
         self.C5 = (self.C5bytes[0] << 8) + self.C5bytes[1]
-        self.C6bytes = bus.read_i2c_block_data(self.addr, 0xAC)
+        self.C6bytes = self.bus.read_i2c_block_data(self.addr, 0xAC)
         self.C6 = (self.C6bytes[0] << 8) + self.C6bytes[1]
         self.D1 = 0
         self.D2 = 0
@@ -119,29 +119,30 @@ class sensor:
 
     def pres(self):
         if self.pressure:  # checking if we want to read the pressure system
-            bus.write_byte(addr, 0x58)  # writing a new bite to the bus
+            self.bus.write_byte(self.addr, 0x58)  # writing a new bite to the bus
             time.sleep(0.05)  # pause to allow completion of previous step
-            tempadcbytes = bus.read_i2c_block_data(addr, 0x00)  # temperature ADC bytes
+            tempadcbytes = self.bus.read_i2c_block_data(self.addr, 0x00)  # temperature ADC bytes
             time.sleep(0.05)  # pause to allow completion of previous step
             self.D2 = (tempadcbytes[0] * 65536.0) + (tempadcbytes[1] * 256.0) + (tempadcbytes[2])  # temp reading convert
-            bus.write_byte(addr, 0x48)  # writing a new bite to the bus
+            self.bus.write_byte(self.addr, 0x48)  # writing a new bite to the bus
             time.sleep(0.05)  # pause to allow completion of previous step
-            presadcbytes = bus.read_i2c_block_data(addr, 0x00)  # pressure ADC bytes
+            presadcbytes = self.bus.read_i2c_block_data(self.addr, 0x00)  # pressure ADC bytes
             time.sleep(0.05)  # pause to allow completion of previous step
             self.D1 = (presadcbytes[0] << 16)+(presadcbytes[1] << 8)+(presadcbytes[2])  # pressure reading convert
 
-             logging.info('Pressure: %f', calculatePressure())  # logging the pressure
+            logging.info('Pressure: %f', self.calculatePressure())  # logging the pressure
 #            logging.info('Temp (P): %f', tempadc)  # logging the temperature
-            return calculatePressure() or None # returning the pressure data for the radioFunction() to use
+            return self.calculatePressure() or None # returning the pressure data for the radioFunction() to use
 
     def calculatePressure(self):
         self.dT =  self.D2 - self.C5*pow(2,8)
         self.TEMP = 20 + self.dT*self.C6/pow(2,23)
         self.OFF = self.C2*pow(2,16)+(self.C4*self.dT)/pow(2,7)
-        self.SENS = self.C1*pow(2,15) + (self.C3*dT)/pow(2,8)
+        self.SENS = self.C1*pow(2,15) + (self.C3*self.dT)/pow(2,8)
         self.P = self.D1*(self.SENS/pow(2,21)-self.OFF)/pow(2,15)
         return self.P
 
+
 if __name__ == "__main__":  # runs the below only when testing
-	Sensor = sensor(True, True, True, True)  # sets the external reading, and none of the others.
-	Sensor.measure()
+    Sensor = sensor(True, True, True, True)  # sets the external reading, and none of the others.
+    Sensor.measure()
