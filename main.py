@@ -83,7 +83,7 @@ class sensor:
             extM = self.exto.readlines()  # reading the lines
             extP = extM[1].find('t=')  # locating the temperature
             ext = float(extM[1][extP+2:])/1000.0  # converting the temperature
-            logging.info('Ext Temp: %f', ext)  # logging the data
+            logging.info('Ext Temp: %f C', ext)  # logging the data
             return ext or None # returns the temperature for use in the radioFunction()
 
     def intTemp(self):
@@ -92,7 +92,7 @@ class sensor:
             intM = self.into.readlines()  # reading the lines
             intP = intM[1].find('t=')  # locating the temperature
             int = float(intM[1][intP+2:])/1000.0  # converting the temperature
-            logging.info('Int Temp: %f', int)  # logging the data
+            logging.info('Int Temp: %f C', int)  # logging the data
             return int or None # returns the temperature for use in the radioFunction()
 
     def GPS(self):
@@ -119,28 +119,57 @@ class sensor:
 
     def pres(self):
         if self.pressure:  # checking if we want to read the pressure system
-            self.bus.write_byte(self.addr, 0x58)  # writing a new bite to the bus
-            time.sleep(0.05)  # pause to allow completion of previous step
-            tempadcbytes = self.bus.read_i2c_block_data(self.addr, 0x00)  # temperature ADC bytes
-            time.sleep(0.05)  # pause to allow completion of previous step
-            self.D2 = (tempadcbytes[0] * 65536.0) + (tempadcbytes[1] * 256.0) + (tempadcbytes[2])  # temp reading convert
-            self.bus.write_byte(self.addr, 0x48)  # writing a new bite to the bus
-            time.sleep(0.05)  # pause to allow completion of previous step
-            presadcbytes = self.bus.read_i2c_block_data(self.addr, 0x00)  # pressure ADC bytes
-            time.sleep(0.05)  # pause to allow completion of previous step
-            self.D1 = (presadcbytes[0] << 16)+(presadcbytes[1] << 8)+(presadcbytes[2])  # pressure reading convert
+#            self.bus.write_byte(self.addr, 0x58)  # writing a new bite to the bus
+#            time.sleep(0.05)  # pause to allow completion of previous step
+#            tempadcbytes = self.bus.read_i2c_block_data(self.addr, 0x00)  # temperature ADC bytes
+#            time.sleep(0.05)  # pause to allow completion of previous step
+#            self.D2 = (tempadcbytes[0] * 65536.0) + (tempadcbytes[1] * 256.0) + (tempadcbytes[2])  # temp reading convert
+#            self.bus.write_byte(self.addr, 0x48)  # writing a new bite to the bus
+#            time.sleep(0.05)  # pause to allow completion of previous step
+#            presadcbytes = self.bus.read_i2c_block_data(self.addr, 0x00)  # pressure ADC bytes
+#            time.sleep(0.05)  # pause to allow completion of previous step
+#            self.D1 = (presadcbytes[0] << 16)+(presadcbytes[1] << 8)+(presadcbytes[2])  # pressure reading convert
 
-            logging.info('Pressure: %f', self.calculatePressure())  # logging the pressure
-#            logging.info('Temp (P): %f', tempadc)  # logging the temperature
+            logging.info('Pressure: %f mbar', self.calculatePressure()[0])  # logging the pressure
+            logging.info('Temp (P): %f C', self.calculatePressure()[1])  # logging the temperature
             return self.calculatePressure() or None # returning the pressure data for the radioFunction() to use
 
     def calculatePressure(self):
-        self.dT =  self.D2 - self.C5*pow(2,8)
-        self.TEMP = 20 + self.dT*self.C6/pow(2,23)
+        self.bus.write_byte(self.addr, 0x48)
+        time.sleep(0.05)
+        self.D1 = self.bus.read_i2c_block_data(self.addr, 0x00)
+        self.D1 = self.D1[0] *65536 + self.D1[1] * 256.0 + self.D1[2]
+#        logging.info(self.D1)
+        self.bus.write_byte(self.addr, 0x58)
+        time.sleep(0.05)
+        self.D2 = self.bus.read_i2c_block_data(self.addr, 0x00)
+        self.D2 = self.D2[0] *65536 + self.D2[1] * 256.0 + self.D2[2]
+        self.dT = self.D2 - self.C5*pow(2,8)
+        self.TEMP = 2000 + self.dT*self.C6/pow(2,23)
         self.OFF = self.C2*pow(2,16)+(self.C4*self.dT)/pow(2,7)
         self.SENS = self.C1*pow(2,15) + (self.C3*self.dT)/pow(2,8)
-        self.P = self.D1*(self.SENS/pow(2,21)-self.OFF)/pow(2,15)
-        return self.P
+#        logging.info(self.SENS)
+#        logging.info(self.TEMP)
+#        logging.info(self.OFF)
+#        self.P = self.D1*(self.SENS/pow(2,21)-self.OFF)/pow(2,15)
+        if self.TEMP < 2000:
+                self.T2 = pow(self.dT,2)/pow(2,31)
+                self.OFF2 = 5 * pow((self.TEMP-2000),2)/pow(2,1)
+                self.SENS2 = 5 * pow((self.TEMP-2000),2)/pow(2,2)
+                if self.TEMP < -1500:
+                        self.OFF2 = self.OFF2 + 7 * pow((self.TEMP +1500),2)
+                        self.SENS2 = self.SENS2 + 11 * pow((self.TEMP+1500),2)/pow(2,1)
+        else:
+                self.T2 = 0
+                self.OFF2 = 0
+                self.SENS2 = 0
+        self.TEMP = self.TEMP - self.T2
+        self.OFF = self.OFF - self.OFF2
+        self.SENS = self.SENS - self.SENS2
+#        logging.info(self.D1)
+        self.P = float(((self.D1*(self.SENS/pow(2,21))-self.OFF)/pow(2,15))/100)
+        self.TEMP = self.TEMP/100
+        return self.P, self.TEMP
 
 
 if __name__ == "__main__":  # runs the below only when testing
