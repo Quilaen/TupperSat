@@ -18,6 +18,18 @@ class sensor:
         self.gpsn = serial.Serial('/dev/ttyACM0', 9600) #setting location of the GPS module
         self.pressure = pressure  # setting the toggle for recording pressure/temp
         self.pressuren = 0x77 #setting location of the pressure module
+        self.bus = smbus.SMBus(1)
+        self.address = address
+        self.C1 = 0
+        self.C2 = 0
+        self.C3 = 0
+        self.C4 = 0
+        self.C5 = 0
+        self.C6 = 0
+        self.D1 = 0
+        self.D2 = 0
+        self.TEMP = 0.0  # Calculated temperature
+        self.PRES = 0.0  # Calculated Pressure
         if self.ext:  # if reading external temp
             logging.info("Logging External Temperature.")  # make a record of it
         else:  # otherwise
@@ -94,18 +106,6 @@ class sensor:
                     return float(GPSData[2]*-1), float(GPSData[4]), float(GPSData[8]), float(GPSData[9]) or None
 
     def initialize(self):
-        self.bus = smbus.SMBus(1)
-        self.address = address
-        self.C1 = 0
-        self.C2 = 0
-        self.C3 = 0
-        self.C4 = 0
-        self.C5 = 0
-        self.C6 = 0
-        self.D1 = 0
-        self.D2 = 0
-        self.TEMP = 0.0  # Calculated temperature
-        self.PRES = 0.0  # Calculated Pressure
         ## The MS6511 Sensor stores 6 values in the EPROM memory that we need in order to calculate the actual temperature and pressure
         ## These values are calculated/stored at the factory when the sensor is calibrated.
         ##      I probably could have used the read word function instead of the whole block, but I wanted to keep things consistent.
